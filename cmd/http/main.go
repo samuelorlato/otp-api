@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"github.com/samuelorlato/otp-api.git/internal/config"
 	"github.com/samuelorlato/otp-api.git/internal/core/usecases"
 	"github.com/samuelorlato/otp-api.git/internal/handlers"
@@ -18,10 +17,11 @@ import (
 func main() {
 	ctx := context.Background()
 
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	// Uncomment to run locally
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	engine := gin.Default()
 
