@@ -16,13 +16,15 @@ type OTPUsecase struct {
 	OTPGenerator  ports.OTPGenerator
 	OTPRepository ports.OTPRepository
 	Cryptor       ports.Cryptor
+	EmailSender   ports.EmailSender
 }
 
-func NewOTPUsecase(OTPGenerator ports.OTPGenerator, OTPRepository ports.OTPRepository, cryptor ports.Cryptor) *OTPUsecase {
+func NewOTPUsecase(OTPGenerator ports.OTPGenerator, OTPRepository ports.OTPRepository, cryptor ports.Cryptor, emailSender ports.EmailSender) *OTPUsecase {
 	return &OTPUsecase{
 		OTPGenerator:  OTPGenerator,
 		OTPRepository: OTPRepository,
 		Cryptor:       cryptor,
+		EmailSender:   emailSender,
 	}
 }
 
@@ -62,7 +64,10 @@ func (o *OTPUsecase) SendOTP(emailDTO *dtos.Email) (*errors.HTTPError, *string) 
 		return err, nil
 	}
 
-	// TODO: send email
+	err = o.EmailSender.Send(details.Email, fmt.Sprintf("Subject: You verification code\r\nYour verification code is %s", OTP))
+	if err != nil {
+		return err, nil
+	}
 
 	return nil, encodedDetailsJSON
 }

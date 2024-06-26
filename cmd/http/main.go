@@ -11,6 +11,7 @@ import (
 	"github.com/samuelorlato/otp-api.git/internal/handlers"
 	"github.com/samuelorlato/otp-api.git/internal/repositories"
 	"github.com/samuelorlato/otp-api.git/pkg/cryptography"
+	"github.com/samuelorlato/otp-api.git/pkg/email"
 	"github.com/samuelorlato/otp-api.git/pkg/otp"
 )
 
@@ -44,7 +45,13 @@ func main() {
 	iv := os.Getenv("IV")
 	cryptor := cryptography.NewCryptor(key, iv)
 
-	OTPUsecase := usecases.NewOTPUsecase(OTPGenerator, OTPRepository, cryptor)
+	host := os.Getenv("SMTP_HOST")
+	port := os.Getenv("SMTP_PORT")
+	from := os.Getenv("FROM_EMAIL")
+	password := os.Getenv("FROM_EMAIL_PASSWORD")
+	emailSender := email.NewEmailSender(host, port, from, password)
+
+	OTPUsecase := usecases.NewOTPUsecase(OTPGenerator, OTPRepository, cryptor, emailSender)
 
 	HTTPHandler := handlers.NewHTTPHandler(engine, OTPUsecase, errorHandler)
 	HTTPHandler.SetRoutes()
