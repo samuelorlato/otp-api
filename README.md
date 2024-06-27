@@ -24,9 +24,7 @@ A Go API that sends verification code (OTP)
 > | name                   | type     | data type |
 > | ------                 | -------- | --------- |
 > | OTP                    | required | string    |
-> | ------                 | -------- | --------- |
 > | encryptedVerification  | required | string    |
-> | ------                 | -------- | --------- |
 > | email                  | required | string    |
 
 ![/vote](./assets/verify.png)
